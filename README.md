@@ -53,6 +53,8 @@ cp .env.example .env
 
 docker-compose up -d
 
+npx prisma generate
+
 npx prisma migrate deploy
 
 npm run seed
@@ -69,6 +71,7 @@ Server runs at http://localhost:3000
 1. Install Dependencies:
 
 cd frontend
+
 npm install
 
 2. Start app:
