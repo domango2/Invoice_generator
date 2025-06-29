@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invoice #{{invoiceNumber}} | Brick & Willow</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.4;
+        color: #333;
+        padding: 15px;
+        font-size: 13px;
+      }
+      .invoice-container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+      }
+      .header {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        color: white;
+        padding: 20px 25px 15px;
+        position: relative;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .logo-icon {
+        width: 30px;
+        height: 30px;
+        background: white;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #4f46e5;
+        font-size: 12px;
+      }
+      .logo-text {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .invoice-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+      .invoice-subtitle {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      .invoice-intro {
+        font-size: 12px;
+        line-height: 1.5;
+        max-width: 500px;
+        opacity: 0.95;
+      }
+      .invoice-badge {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .invoice-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        padding: 20px;
+        background: #f1f5f9;
+      }
+      .info-section {
+        background: white;
+        border-radius: 6px;
+        padding: 12px 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+      }
+      .info-heading {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .info-detail {
+        margin-bottom: 4px;
+        display: flex;
+        font-size: 12px;
+      }
+      .info-label {
+        font-weight: 600;
+        min-width: 70px;
+        color: #475569;
+      }
+      .items-section {
+        padding: 0 20px 15px;
+      }
+      .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 12px;
+      }
+      .items-table th {
+        text-align: left;
+        padding: 8px 10px;
+        background-color: #f1f5f9;
+        color: #475569;
+        font-weight: 600;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .items-table td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .summary {
+        background: #f8fafc;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .summary-inner {
+        width: 250px;
+        font-size: 13px;
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+      }
+      .total-row {
+        border-top: 1px solid #e2e8f0;
+        margin-top: 5px;
+        padding-top: 8px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #4f46e5;
+      }
+      .notes {
+        padding: 15px 20px;
+        border-top: 1px solid #e2e8f0;
+        font-size: 11px;
+      }
+      .notes-heading {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .footer {
+        padding: 15px 20px;
+        background: #f1f5f9;
+        color: #64748b;
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+      }
+      .thank-you {
+        font-size: 14px;
+        font-weight: 600;
+        color: #4f46e5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <div class="header">
+        <div class="logo">
+          <div class="logo-icon">B&W</div>
+          <div class="logo-text">Brick & Willow</div>
+        </div>
+        <p class="invoice-subtitle">Invoice</p>
+        <h1 class="invoice-title">#{{invoiceNumber}}</h1>
+        <div class="invoice-intro">
+          Thank you for your business! Please let us know if you have any
+          questions.
+        </div>
+        <div class="invoice-badge">{{formatDateTime datetime}}</div>
+      </div>
+
+      <div class="invoice-info">
+        <div class="info-section">
+          <div class="info-heading">Bill To</div>
+          <div class="info-detail">
+            <span class="info-label">Name:</span>
+            <span class="info-value">{{firstName}} {{lastName}}</span>
+          </div>
+          {{#if company}}
+          <div class="info-detail">
+            <span class="info-label">Company:</span>
+            <span class="info-value">{{company}}</span>
+          </div>
+          {{/if}}
+          <div class="info-detail">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{email}}</span>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <div class="info-heading">Details</div>
+          <div class="info-detail">
+            <span class="info-label">Invoice:</span>
+            <span class="info-value">#{{invoiceNumber}}</span>
+          </div>
+          <div class="info-detail">
+            <span class="info-label">Issued:</span>
+            <span class="info-value">{{formatDate date}}</span>
+          </div>
+          <div class="info-detail">
+            <span class="info-label">Due Date:</span>
+            <span class="info-value">{{formatDate dueDate}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="items-section">
+        <div class="info-heading">Services</div>
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each items}}
+            <tr>
+              <td>{{this.description}}</td>
+              <td>{{this.quantity}}</td>
+              <td>${{this.price}}</td>
+              <td>${{multiply this.price this.quantity}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary">
+        <div class="summary-inner">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>${{subtotal}}</span>
+          </div>
+          {{#if tax}}
+          <div class="summary-row">
+            <span>Tax ({{taxRate}}%):</span>
+            <span>${{tax}}</span>
+          </div>
+          {{/if}}
+          <div class="summary-row total-row">
+            <span>Total Due:</span>
+            <span>${{total}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="notes-heading">Payment Details</div>
+        <p>
+          Due in {{paymentTerms}} days. Bank transfer to:
+          <strong>Account: 1234 5678 9012</strong> (Routing: 021000021)
+        </p>
+      </div>
+
+      <div class="footer">
+        <div>
+          <div>Brick & Willow Design</div>
+          <div>hello@brickandwillow.com | (123) 456-7890</div>
+        </div>
+        <div class="thank-you">Thank You!</div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URI")
+}
+
+model Company {
+  id      Int      @id @default(autoincrement())
+  name    String
+  address String
+  clients Client[]
+
+  @@map("companies")
+}
+
+model Client {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  firstName  String   @map("first_name")
+  lastName   String   @map("last_name")
+  companyId  Int      @map("company_id")
+  company    Company  @relation(fields: [companyId], references: [id])
+  invoices   Invoice[]
+
+  @@map("clients")
+}
+
+model Invoice {
+  id          Int       @id @default(autoincrement())
+  number      String    @unique
+  date        DateTime
+  dueDate     DateTime  @map("due_date")
+  clientId    Int       @map("client_id")
+  client      Client    @relation(fields: [clientId], references: [id])
+  items       InvoiceItem[]
+  subtotal    Float
+  tax         Float
+  total       Float
+  status      String    @default("UNPAID")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          Int      @id @default(autoincrement())
+  description String
+  price       Float
+  quantity    Int      @default(1)
+  invoiceId   Int      @map("invoice_id")
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
+
+  @@map("invoice_items")
+}
+
+model InvoiceRequest {
+  id          Int       @id @default(autoincrement())
+  email       String
+  items       Json
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@map("invoice_requests")
+}
