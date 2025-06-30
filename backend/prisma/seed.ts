@@ -35,13 +35,6 @@ async function main() {
     ],
   });
 
-  const jane = await prisma.client.findUnique({
-    where: { email: 'jane.doe@example.com' },
-  });
-  const john = await prisma.client.findUnique({
-    where: { email: 'john.smith@example.com' },
-  });
-
   console.log('✅ Seed completed with companies, clients');
 }
 
